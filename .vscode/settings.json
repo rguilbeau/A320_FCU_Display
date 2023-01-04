@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.cps": "javascript",
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "ranges": "cpp"
+    }
+}
