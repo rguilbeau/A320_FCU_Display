@@ -15,7 +15,7 @@
 #define X_OFFSET 0
 #define Y_OFFSET 6
 
-#define PIN_CANBUS_CS_SPI D8
+#define PIN_CANBUS_CS_SPI 10
 
 #define OLED_SPEED_INDEX 0
 #define OLED_HEADING_INDEX 1

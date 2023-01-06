@@ -9,8 +9,7 @@
 
 #include "displayer/SpeedDisplayer.h"
 #include "displayer/HeadingDisplayer.h"
-#include "displayer/HeadingModeDisplayer.h"
-#include "displayer/VerticalModeDisplayer.h"
+#include "displayer/NavModeDisplayer.h"
 #include "displayer/AltitudeDisplayer.h"
 #include "displayer/VerticalDisplayer.h"
 
@@ -24,12 +23,11 @@ FcuDisplayFrame fcuDisplayFrame;
 // Initialisation des objets des afficheurs
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-SpeedDisplayer speedDisplayer(&display, 0, X_OFFSET, Y_OFFSET);
-HeadingDisplayer headingDisplayer(&display, 1, X_OFFSET, Y_OFFSET);
-HeadingModeDisplayer headingModeDisplayer(&display, 1, X_OFFSET, Y_OFFSET);
-VerticalModeDisplayer verticalModeDisplayer(&display, 1, X_OFFSET, Y_OFFSET);
-AltitudeDisplayer altitudeDisplayer(&display, 1, X_OFFSET, Y_OFFSET);
-VerticalDisplayer verticalDisplayer(&display, 1, X_OFFSET, Y_OFFSET);
+SpeedDisplayer speedDisplayer(&display, 7);
+HeadingDisplayer headingDisplayer(&display, 6);
+NavModeDisplayer navModeDisplayer(&display, 5);
+AltitudeDisplayer altitudeDisplayer(&display, 4);
+VerticalDisplayer verticalDisplayer(&display, 3);
 
 /**
  * @brief Initialisation du CAN Bus et des afficheurs
@@ -38,15 +36,21 @@ VerticalDisplayer verticalDisplayer(&display, 1, X_OFFSET, Y_OFFSET);
 void setup() {
   SERIAL_BEGIN(9600);
 
-  SERIAL_PRINTLN("Starting...");
-  speedDisplayer.displayInit();
+  SERIAL_PRINTLN(F("Starting..."));
+
+  Wire.begin();
+  speedDisplayer.begin();
+  headingDisplayer.begin();
+  navModeDisplayer.begin();
+  altitudeDisplayer.begin();
+  verticalDisplayer.begin();
 
   mcp2515.reset();
   mcp2515.setBitrate(CAN_125KBPS, MCP_8MHZ);
   mcp2515.setNormalMode();
 
   delay(5000);
-  SERIAL_PRINTLN("Started !");
+  SERIAL_PRINTLN(F("Started !"));
 }
 
 /**
@@ -67,6 +71,7 @@ void loop() {
     // ERROR_NOMSG     = 5
     SERIAL_PRINTLN("Can bus message failed. errno:" + String(error));
   } else if (error == MCP2515::ERROR_OK) {
+    Serial.println(frame.can_id);
     
     fcuDisplayFrame.decode(&frame);
     
@@ -78,12 +83,8 @@ void loop() {
       headingDisplayer.display(&fcuDisplayFrame);
     }
 
-    if(headingModeDisplayer.checkMutation(&fcuDisplayFrame)) {
-      headingModeDisplayer.display(&fcuDisplayFrame);
-    }
-
-    if(verticalModeDisplayer.checkMutation(&fcuDisplayFrame)) {
-      verticalModeDisplayer.display(&fcuDisplayFrame);
+    if(navModeDisplayer.checkMutation(&fcuDisplayFrame)) {
+      navModeDisplayer.display(&fcuDisplayFrame);
     }
 
     if(altitudeDisplayer.checkMutation(&fcuDisplayFrame)) {

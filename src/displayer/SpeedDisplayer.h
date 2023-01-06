@@ -6,7 +6,7 @@
 class SpeedDisplayer : public Displayer {
 
     public:
-        SpeedDisplayer(Adafruit_SSD1306 *screen, short indexDisplay, short x_offset, short y_offset);
+        SpeedDisplayer(Adafruit_SSD1306 *screen, short indexDisplay);
 
         void display(FcuDisplayFrame *frame);
         bool checkMutation(FcuDisplayFrame *frame);

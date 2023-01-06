@@ -6,7 +6,7 @@
 class VerticalDisplayer : public Displayer {
 
     public:
-        VerticalDisplayer(Adafruit_SSD1306 *screen, short indexDisplay, short x_offset, short y_offset);
+        VerticalDisplayer(Adafruit_SSD1306 *screen, short indexDisplay);
 
         void display(FcuDisplayFrame *frame);
         bool checkMutation(FcuDisplayFrame *frame);

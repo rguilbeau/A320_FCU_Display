@@ -12,16 +12,14 @@ class Displayer
 {
 
     public:
-        void displayInit();
+        void begin();
 
     protected:
-        Displayer(Adafruit_SSD1306 *screen, short indexDisplay, short x_offset, short y_offset);
+        Displayer(Adafruit_SSD1306 *screen, short indexDisplay);
 
         Adafruit_SSD1306 *_screen;
 
         short _indexDisplay;
-        short _x_offset;
-        short _y_offset;
 
         String leftPad(int value, int size);
         void selectScreen();

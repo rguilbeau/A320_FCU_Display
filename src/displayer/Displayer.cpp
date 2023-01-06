@@ -11,36 +11,28 @@ short Displayer::_selectedScreen = -1;
  * 
  * @param screen Le driver Adafruit_SSD1306 pour le pilotage de l'écran
  * @param indexDisplay L'index de l'écran sur le multiplexer I2C
- * @param x_offset L'offset x des curseurs
- * @param y_offset L'offset y des les curseurs
  */
 Displayer::Displayer(
     Adafruit_SSD1306 *screen, 
-    short indexDisplay, 
-    short x_offset, 
-    short y_offset
+    short indexDisplay
 ) {
     _screen = screen;
     _indexDisplay = indexDisplay;
-    _x_offset = x_offset;
-    _y_offset = y_offset;
-
-    selectScreen();
-    _screen->begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
-    _screen->setTextColor(SSD1306_WHITE);
-    _screen->clearDisplay();
-    _screen->display();
 }
 
 /**
  * @brief Afifiche "init display" sur l'écran
  * 
  */
-void Displayer::displayInit()
+void Displayer::begin()
 {
     selectScreen();
+    _screen->begin(SSD1306_EXTERNALVCC, SCREEN_ADDRESS);
+    _screen->setTextColor(SSD1306_WHITE);
+
     _screen->clearDisplay();
-    _screen->setCursor(_x_offset + 30, _y_offset + 16);
+    _screen->setRotation(2);
+    _screen->setCursor(X_OFFSET + 30, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("init display"));
     _screen->display();
@@ -68,7 +60,9 @@ String Displayer::leftPad(int value, int size)
 void Displayer::selectScreen()
 {
     if(Displayer::_selectedScreen != _indexDisplay) {
-        // switch i2c
+        Wire.beginTransmission(0x70);  // TCA9548A address
+        Wire.write(1 << _indexDisplay);
+        Wire.endTransmission();
         Displayer::_selectedScreen = _indexDisplay;
     }
 }

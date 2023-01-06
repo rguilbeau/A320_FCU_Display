@@ -5,19 +5,13 @@
  * 
  * @param screen Le driver Adafruit_SSD1306 pour le pilotage de l'écran
  * @param indexDisplay L'index de l'écran sur le multiplexer I2C
- * @param x_offset L'offset x des curseurs
- * @param y_offset L'offset y des les curseurs
  */
 HeadingDisplayer::HeadingDisplayer(
     Adafruit_SSD1306 *screen, 
-    short indexDisplay, 
-    short x_offset, 
-    short y_offset
+    short indexDisplay
 ): Displayer (
     screen, 
-    indexDisplay, 
-    x_offset, 
-    y_offset
+    indexDisplay
 ) {
 
 }
@@ -56,17 +50,17 @@ void HeadingDisplayer::display(FcuDisplayFrame *frame)
     _screen->clearDisplay();
     
     if(_isTrackMode) {
-        _screen->setCursor(_x_offset + 48, _y_offset + 16);
+        _screen->setCursor(X_OFFSET + 48, Y_OFFSET + 16);
         _screen->setFont(&Nimbus_Sans_L_Bold_16);
         _screen->print(F("TRK"));
     } else {
-        _screen->setCursor(_x_offset + 4, _y_offset + 16);
+        _screen->setCursor(X_OFFSET + 4, Y_OFFSET + 16);
         _screen->setFont(&Nimbus_Sans_L_Bold_16);
         _screen->print(F("HDG"));
     }
 
     if(_isLatNavigation) {
-        _screen->setCursor(_x_offset + 92, _y_offset + 16);
+        _screen->setCursor(X_OFFSET + 92, Y_OFFSET + 16);
         _screen->setFont(&Nimbus_Sans_L_Bold_16);
         _screen->print(F("LAT"));
     }
@@ -83,7 +77,7 @@ void HeadingDisplayer::display(FcuDisplayFrame *frame)
     }
 
     // HDG digit
-    _screen->setCursor(_x_offset + 31, _y_offset + 45);
+    _screen->setCursor(X_OFFSET + 31, Y_OFFSET + 45);
     _screen->setFont(&DSEG7_Classic_Mini_Bold_25);
     _screen->print(headingDisplay);
 

@@ -5,19 +5,13 @@
  * 
  * @param screen Le driver Adafruit_SSD1306 pour le pilotage de l'écran
  * @param indexDisplay L'index de l'écran sur le multiplexer I2C
- * @param x_offset L'offset x des curseurs
- * @param y_offset L'offset y des les curseurs
  */
 AltitudeDisplayer::AltitudeDisplayer(
     Adafruit_SSD1306 *screen, 
-    short indexDisplay, 
-    short x_offset, 
-    short y_offset
+    short indexDisplay
 ): Displayer (
     screen, 
-    indexDisplay, 
-    x_offset, 
-    y_offset
+    indexDisplay
 ) {
 
 }
@@ -52,16 +46,16 @@ void AltitudeDisplayer::display(FcuDisplayFrame *frame)
     _screen->clearDisplay();
     
     //ALT
-    _screen->setCursor(_x_offset + 24, _y_offset + 16);
+    _screen->setCursor(X_OFFSET + 24, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("ALT"));
 
     // ARROW LEFT
-    _screen->fillRect(_x_offset + 65, _y_offset + 10, 24, 2, SSD1306_WHITE);
-    _screen->fillRect(_x_offset + 65, _y_offset + 12, 2, 3, SSD1306_WHITE);
+    _screen->fillRect(X_OFFSET + 65, Y_OFFSET + 10, 24, 2, SSD1306_WHITE);
+    _screen->fillRect(X_OFFSET + 65, Y_OFFSET + 12, 2, 3, SSD1306_WHITE);
 
     //LVL
-    _screen->setCursor(_x_offset + 93, _y_offset + 16);
+    _screen->setCursor(X_OFFSET + 93, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("LVL"));
 
@@ -77,7 +71,7 @@ void AltitudeDisplayer::display(FcuDisplayFrame *frame)
     }
 
     // ALT digit
-    _screen->setCursor(_x_offset + 0, _y_offset + 45);
+    _screen->setCursor(X_OFFSET + 0, Y_OFFSET + 45);
     _screen->setFont(&DSEG7_Classic_Mini_Bold_25);
     _screen->print(altitudeDisplay);
         

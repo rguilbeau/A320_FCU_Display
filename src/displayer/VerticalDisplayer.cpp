@@ -5,19 +5,13 @@
  * 
  * @param screen Le driver Adafruit_SSD1306 pour le pilotage de l'écran
  * @param indexDisplay L'index de l'écran sur le multiplexer I2C
- * @param x_offset L'offset x des curseurs
- * @param y_offset L'offset y des les curseurs
  */
 VerticalDisplayer::VerticalDisplayer(
     Adafruit_SSD1306 *screen, 
-    short indexDisplay, 
-    short x_offset, 
-    short y_offset
+    short indexDisplay
 ): Displayer (
     screen, 
-    indexDisplay, 
-    x_offset, 
-    y_offset
+    indexDisplay
 ) {
 
 }
@@ -54,21 +48,21 @@ void VerticalDisplayer::display(FcuDisplayFrame *frame)
     _screen->clearDisplay();
     
     // CH
-    _screen->setCursor(_x_offset + 4, _y_offset + 16);
+    _screen->setCursor(X_OFFSET + 4, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("CH"));
 
     // ARROW RIGHT
-    _screen->fillRect(_x_offset + 32, _y_offset + 10, 24, 2, SSD1306_WHITE);
-    _screen->fillRect(_x_offset + 54, _y_offset + 12, 2, 3, SSD1306_WHITE);
+    _screen->fillRect(X_OFFSET + 32, Y_OFFSET + 10, 24, 2, SSD1306_WHITE);
+    _screen->fillRect(X_OFFSET + 54, Y_OFFSET + 12, 2, 3, SSD1306_WHITE);
 
     // V/S
-    _screen->setCursor(_x_offset + 64, _y_offset + 16);
+    _screen->setCursor(X_OFFSET + 64, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("V/S"));  
 
     if(_isFpa) {
-        _screen->setCursor(_x_offset + 93, _y_offset + 16);
+        _screen->setCursor(X_OFFSET + 93, Y_OFFSET + 16);
         _screen->setFont(&Nimbus_Sans_L_Bold_16);
         _screen->print(F("FPA"));
     }
@@ -88,7 +82,7 @@ void VerticalDisplayer::display(FcuDisplayFrame *frame)
     }
 
     // V/S digit
-    _screen->setCursor(_x_offset + 25, _y_offset + 45);
+    _screen->setCursor(X_OFFSET + 25, Y_OFFSET + 45);
     _screen->setFont(&DSEG7_Classic_Mini_Bold_25);
     _screen->print(verticalSpeedDisplay);
         

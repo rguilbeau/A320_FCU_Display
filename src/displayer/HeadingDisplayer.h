@@ -6,7 +6,7 @@
 class HeadingDisplayer : public Displayer {
 
     public:
-        HeadingDisplayer(Adafruit_SSD1306 *screen, short indexDisplay, short x_offset, short y_offset);
+        HeadingDisplayer(Adafruit_SSD1306 *screen, short indexDisplay);
 
         void display(FcuDisplayFrame *frame);
         bool checkMutation(FcuDisplayFrame *frame);
