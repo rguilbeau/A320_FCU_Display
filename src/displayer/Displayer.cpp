@@ -28,14 +28,17 @@ void Displayer::begin()
 {
     selectScreen();
     _screen->begin(SSD1306_EXTERNALVCC, SCREEN_ADDRESS);
+    
+    _screen->setContrast(100);
+    
     _screen->setTextColor(SSD1306_WHITE);
 
     _screen->clearDisplay();
     _screen->setRotation(2);
-    _screen->setCursor(X_OFFSET + 30, Y_OFFSET + 16);
+    _screen->setCursor(X_OFFSET + 15, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("init display"));
-    _screen->display();
+    _screen->display();    
 }
 
 /**
@@ -51,6 +54,17 @@ String Displayer::leftPad(int value, int size)
     String format = "%." + String(size) + "u";
     sprintf(buff, format.c_str(), value);
     return String(buff);
+}
+
+/**
+ * @brief Changement de contraste (rétroéclairage) de l'écran
+ * 
+ * @param value 
+ */
+void Displayer::setContrast(short value)
+{
+    selectScreen();
+    _screen->setContrast(value);
 }
 
 /**

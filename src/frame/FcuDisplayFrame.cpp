@@ -32,7 +32,7 @@ void FcuDisplayFrame::decode(struct can_frame *frame)
     isSpeedForced = binaryIndicators[4];
     isHeadingForced = binaryIndicators[5];
     isAltitudeForced = binaryIndicators[6];
-    isVerticalSpeedNegative = binaryIndicators[7];
+    isVerticalSpeedPositive = binaryIndicators[7];
 
     speed = frame->data[0];
     heading = frame->data[1];
@@ -46,7 +46,7 @@ void FcuDisplayFrame::decode(struct can_frame *frame)
 
     for(short i = 5; i < 8; i++) {
         if(binaryMultiplicator[i] == true) {
-            heading = heading + ((i - 5) * 100);
+            heading = heading + ((i - 4) * 100);
             break;
         }
     }

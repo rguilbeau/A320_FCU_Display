@@ -66,7 +66,7 @@ void AltitudeDisplayer::display(FcuDisplayFrame *frame)
         altitudeDisplay = leftPad(_altitude, 5);
     }
 
-    if(_isAltitudeForced) {
+    if(!_isAltitudeForced) {
         altitudeDisplay += "*";
     }
 

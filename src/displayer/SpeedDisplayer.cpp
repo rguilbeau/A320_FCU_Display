@@ -45,8 +45,8 @@ void SpeedDisplayer::display(FcuDisplayFrame *frame)
     _isSpeedForced = frame->isSpeedForced;
 
     selectScreen();
-    _screen->clearDisplay();
 
+    _screen->clearDisplay();
     String speedDisplay = "";
 
     if(_isMachSpeed) {
@@ -72,6 +72,5 @@ void SpeedDisplayer::display(FcuDisplayFrame *frame)
     _screen->setCursor(X_OFFSET + 31, Y_OFFSET + 45);
     _screen->setFont(&DSEG7_Classic_Mini_Bold_25);
     _screen->print(speedDisplay);
-
     _screen->display();
 }

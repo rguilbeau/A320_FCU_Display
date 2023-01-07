@@ -13,7 +13,7 @@ class SpeedDisplayer : public Displayer {
 
     private:
         bool _isMachSpeed; 
-        unsigned short _speed; 
+        float _speed; 
         bool _isSpeedHidden;
         bool _isSpeedForced;
 };

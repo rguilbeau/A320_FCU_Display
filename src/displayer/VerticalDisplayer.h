@@ -14,7 +14,7 @@ class VerticalDisplayer : public Displayer {
     private:
         bool _isFpa;
         float _verticalSpeed;
-        bool _isVerticalSpeedNegative;
+        bool _isVerticalSpeedPositive;
         bool _isVerticalSpeedHidden;
 };
 

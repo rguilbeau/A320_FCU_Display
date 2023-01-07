@@ -22,15 +22,17 @@ FcuDisplayFrame fcuDisplayFrame;
 
 // Initialisation des objets des afficheurs
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+SpeedDisplayer speedDisplayer(&display, OLED_SPEED_INDEX);
+HeadingDisplayer headingDisplayer(&display, OLED_HEADING_INDEX);
+NavModeDisplayer navModeDisplayer(&display, OLED_NAV_MODE_INDEX);
+AltitudeDisplayer altitudeDisplayer(&display, OLED_ALTITUDE_INDEX);
+VerticalDisplayer verticalDisplayer(&display, OLED_VERTICAL_INDEX);
 
-SpeedDisplayer speedDisplayer(&display, 7);
-HeadingDisplayer headingDisplayer(&display, 6);
-NavModeDisplayer navModeDisplayer(&display, 5);
-AltitudeDisplayer altitudeDisplayer(&display, 4);
-VerticalDisplayer verticalDisplayer(&display, 3);
+// Flag pour forcer la 1ère mise à jour
+bool firstInit = true;
 
 /**
- * @brief Initialisation du CAN Bus et des afficheurs
+ * @brief Initialisation des écrans et du CAN Bus
  * 
  */
 void setup() {
@@ -54,7 +56,7 @@ void setup() {
 }
 
 /**
- * @brief Récéption des messages du CAN Bus et rafraichissement des afficheurs
+ * @brief Attente et traitement des messages du CAN Bus
  * 
  */
 void loop() {
@@ -71,28 +73,50 @@ void loop() {
     // ERROR_NOMSG     = 5
     SERIAL_PRINTLN("Can bus message failed. errno:" + String(error));
   } else if (error == MCP2515::ERROR_OK) {
-    Serial.println(frame.can_id);
     
-    fcuDisplayFrame.decode(&frame);
-    
-    if(speedDisplayer.checkMutation(&fcuDisplayFrame)) {
-      speedDisplayer.display(&fcuDisplayFrame);
-    }
-    
-    if(headingDisplayer.checkMutation(&fcuDisplayFrame)) {
-      headingDisplayer.display(&fcuDisplayFrame);
+    /**
+     *  Gestion du rétroéclairage des écrans
+     */
+    if(frame.can_id == 0xC8) {
+      short contrast = (short)frame.data[0];
+      if(contrast > 100) {
+        contrast = 100;
+      }
+      speedDisplayer.setContrast(contrast);
+      headingDisplayer.setContrast(contrast);
+      navModeDisplayer.setContrast(contrast);
+      altitudeDisplayer.setContrast(contrast);
+      verticalDisplayer.setContrast(contrast);
     }
 
-    if(navModeDisplayer.checkMutation(&fcuDisplayFrame)) {
-      navModeDisplayer.display(&fcuDisplayFrame);
-    }
+    /**
+     * Mise à jour des écrans avec les informations
+     * de la frame
+     */
+    else if(frame.can_id == 0x64) {
+      fcuDisplayFrame.decode(&frame);
 
-    if(altitudeDisplayer.checkMutation(&fcuDisplayFrame)) {
-      altitudeDisplayer.display(&fcuDisplayFrame);
-    }
+      if(speedDisplayer.checkMutation(&fcuDisplayFrame) || firstInit) {
+        speedDisplayer.display(&fcuDisplayFrame);
+      }
 
-    if(verticalDisplayer.checkMutation(&fcuDisplayFrame)) {
-      verticalDisplayer.display(&fcuDisplayFrame);
-    }
+      if(headingDisplayer.checkMutation(&fcuDisplayFrame) || firstInit) {
+        headingDisplayer.display(&fcuDisplayFrame);
+      }
+
+      if(navModeDisplayer.checkMutation(&fcuDisplayFrame) || firstInit) {
+        navModeDisplayer.display(&fcuDisplayFrame);
+      }
+
+      if(altitudeDisplayer.checkMutation(&fcuDisplayFrame) || firstInit) {
+        altitudeDisplayer.display(&fcuDisplayFrame);
+      }
+
+      if(verticalDisplayer.checkMutation(&fcuDisplayFrame) || firstInit) {
+        verticalDisplayer.display(&fcuDisplayFrame);
+      }
+      
+      firstInit = false;
+    }    
   }
 }

@@ -28,7 +28,7 @@ bool VerticalDisplayer::checkMutation(FcuDisplayFrame *frame)
     return
         _isFpa != frame->isFpa ||
         _verticalSpeed != frame->verticalSpeed ||
-        _isVerticalSpeedNegative != frame->isVerticalSpeedNegative ||
+        _isVerticalSpeedPositive != frame->isVerticalSpeedPositive ||
         _isVerticalSpeedHidden != frame->isVerticalSpeedHidden;
 }
 
@@ -41,7 +41,7 @@ void VerticalDisplayer::display(FcuDisplayFrame *frame)
 {
     _isFpa = frame->isFpa;
     _verticalSpeed = frame->verticalSpeed;
-    _isVerticalSpeedNegative = frame->isVerticalSpeedNegative;
+    _isVerticalSpeedPositive = frame->isVerticalSpeedPositive;
     _isVerticalSpeedHidden = frame->isVerticalSpeedHidden;
 
     selectScreen(); 
@@ -56,29 +56,36 @@ void VerticalDisplayer::display(FcuDisplayFrame *frame)
     _screen->fillRect(X_OFFSET + 32, Y_OFFSET + 10, 24, 2, SSD1306_WHITE);
     _screen->fillRect(X_OFFSET + 54, Y_OFFSET + 12, 2, 3, SSD1306_WHITE);
 
-    // V/S
-    _screen->setCursor(X_OFFSET + 64, Y_OFFSET + 16);
-    _screen->setFont(&Nimbus_Sans_L_Bold_16);
-    _screen->print(F("V/S"));  
-
     if(_isFpa) {
         _screen->setCursor(X_OFFSET + 93, Y_OFFSET + 16);
         _screen->setFont(&Nimbus_Sans_L_Bold_16);
         _screen->print(F("FPA"));
+    } else {
+        _screen->setCursor(X_OFFSET + 64, Y_OFFSET + 16);
+        _screen->setFont(&Nimbus_Sans_L_Bold_16);
+        _screen->print(F("V/S"));  
     }
 
-    String verticalSpeedDisplay = String(_verticalSpeed);
     
-    if(_isVerticalSpeedNegative) {
-        verticalSpeedDisplay = "-" + verticalSpeedDisplay;
+    String verticalSpeedDisplay;;
+    
+    if(_isVerticalSpeedHidden) {
+        verticalSpeedDisplay = "-----";
     } else {
-        verticalSpeedDisplay = "+" + verticalSpeedDisplay; 
-    }
+        verticalSpeedDisplay = String(_verticalSpeed);
 
-    if(_isFpa) {
-        verticalSpeedDisplay = " " + verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 1) + " ";
-    } else {
-        verticalSpeedDisplay = verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 2) + "o";
+        if(_isVerticalSpeedPositive) {
+            verticalSpeedDisplay = "+" + verticalSpeedDisplay;
+        } else {
+            verticalSpeedDisplay = "-" + verticalSpeedDisplay; 
+        }
+
+        if(_isFpa) {
+            verticalSpeedDisplay = " " + verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 1) + " ";
+        } else {
+            // -5 parce que float 1600.00
+            verticalSpeedDisplay = verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 5) + "oo";
+        }
     }
 
     // V/S digit

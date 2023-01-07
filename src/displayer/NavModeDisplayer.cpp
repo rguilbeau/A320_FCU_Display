@@ -43,23 +43,23 @@ void NavModeDisplayer::display(FcuDisplayFrame *frame)
     selectScreen(); 
     _screen->clearDisplay();
     
+
+    _screen->setFont(&Nimbus_Sans_L_Bold_16);
+
+
     if(_isTrackMode) {
-        _screen->setCursor(X_OFFSET + 92, Y_OFFSET + 45);
-        _screen->setFont(&Nimbus_Sans_L_Bold_16);
+        _screen->setCursor(X_OFFSET + 15, Y_OFFSET + 45);
         _screen->print(F("TRK")); 
     } else {
-        _screen->setCursor(X_OFFSET + 90, Y_OFFSET + 30);
-        _screen->setFont(&Nimbus_Sans_L_Bold_16);
+        _screen->setCursor(X_OFFSET + 15, Y_OFFSET + 30);
         _screen->print(F("HDG"));  
     }
 
     if(_isFpa) {
-        _screen->setCursor(X_OFFSET + 0, Y_OFFSET + 45);
-        _screen->setFont(&Nimbus_Sans_L_Bold_16);
+        _screen->setCursor(X_OFFSET + 75, Y_OFFSET + 45);
         _screen->print(F("FPA")); 
     } else {
-        _screen->setCursor(X_OFFSET + 0, Y_OFFSET + 30);
-        _screen->setFont(&Nimbus_Sans_L_Bold_16);
+        _screen->setCursor(X_OFFSET + 75, Y_OFFSET + 30);
         _screen->print(F("V/S"));  
     }
     

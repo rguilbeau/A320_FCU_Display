@@ -1,4 +1,4 @@
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
     #define SERIAL_BEGIN(x) Serial.begin(x);
@@ -15,11 +15,10 @@
 #define X_OFFSET 0
 #define Y_OFFSET 6
 
-#define PIN_CANBUS_CS_SPI 10
+#define PIN_CANBUS_CS_SPI D8
 
-#define OLED_SPEED_INDEX 0
-#define OLED_HEADING_INDEX 1
-#define OLED_HEADING_MODE_INDEX 2
-#define OLED_VERTICAL_MODE_INDEX 3
+#define OLED_SPEED_INDEX 7
+#define OLED_HEADING_INDEX 6
+#define OLED_NAV_MODE_INDEX 5
 #define OLED_ALTITUDE_INDEX 4
-#define OLED_VERTICAL_INDEX 5
+#define OLED_VERTICAL_INDEX 3
