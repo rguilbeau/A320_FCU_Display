@@ -32,6 +32,19 @@ bool VerticalDisplayer::checkMutation(FcuDisplayFrame *frame)
         _isVerticalSpeedHidden != frame->isVerticalSpeedHidden;
 }
 
+void VerticalDisplayer::displayTest()
+{
+    selectScreen(); 
+    _screen->clearDisplay();
+    
+    printFixedIndicator();
+    printVsSpeedIndicator();
+    printFpaIndicator();
+    printDigit(F("+8888"));
+    
+    _screen->display(); 
+}
+
 /**
  * @brief Rafraichissement l'écran avec les données de la frame
  * 
@@ -47,6 +60,42 @@ void VerticalDisplayer::display(FcuDisplayFrame *frame)
     selectScreen(); 
     _screen->clearDisplay();
     
+    printFixedIndicator();
+
+    if(_isFpa) {
+        printFpaIndicator();
+    } else {
+       printVsSpeedIndicator();
+    }
+
+    String verticalSpeedDisplay;
+    
+    if(_isVerticalSpeedHidden) {
+        verticalSpeedDisplay = "-----";
+    } else {
+        if(_isFpa) {
+            verticalSpeedDisplay = String(_verticalSpeed);
+            verticalSpeedDisplay = verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 1) + " ";
+        } else {
+            // -5 parce que float 1600.00
+            verticalSpeedDisplay = leftPad(_verticalSpeed, 4);
+            verticalSpeedDisplay = verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 2) + "oo";
+        }
+
+        if(_isVerticalSpeedPositive) {
+            verticalSpeedDisplay = "+" + verticalSpeedDisplay;
+        } else {
+            verticalSpeedDisplay = "-" + verticalSpeedDisplay; 
+        }
+    }
+
+    printDigit(verticalSpeedDisplay);
+        
+    _screen->display();    
+}
+
+void VerticalDisplayer::printFixedIndicator()
+{
     // CH
     _screen->setCursor(X_OFFSET + 4, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
@@ -55,43 +104,26 @@ void VerticalDisplayer::display(FcuDisplayFrame *frame)
     // ARROW RIGHT
     _screen->fillRect(X_OFFSET + 32, Y_OFFSET + 10, 24, 2, SSD1306_WHITE);
     _screen->fillRect(X_OFFSET + 54, Y_OFFSET + 12, 2, 3, SSD1306_WHITE);
+}
 
-    if(_isFpa) {
-        _screen->setCursor(X_OFFSET + 93, Y_OFFSET + 16);
-        _screen->setFont(&Nimbus_Sans_L_Bold_16);
-        _screen->print(F("FPA"));
-    } else {
-        _screen->setCursor(X_OFFSET + 64, Y_OFFSET + 16);
-        _screen->setFont(&Nimbus_Sans_L_Bold_16);
-        _screen->print(F("V/S"));  
-    }
+void VerticalDisplayer::printVsSpeedIndicator()
+{
+    _screen->setCursor(X_OFFSET + 64, Y_OFFSET + 16);
+    _screen->setFont(&Nimbus_Sans_L_Bold_16);
+    _screen->print(F("V/S"));  
+}
 
-    
-    String verticalSpeedDisplay;;
-    
-    if(_isVerticalSpeedHidden) {
-        verticalSpeedDisplay = "-----";
-    } else {
-        verticalSpeedDisplay = String(_verticalSpeed);
+void VerticalDisplayer::printFpaIndicator()
+{
+    _screen->setCursor(X_OFFSET + 93, Y_OFFSET + 16);
+    _screen->setFont(&Nimbus_Sans_L_Bold_16);
+    _screen->print(F("FPA"));
+}
 
-        if(_isVerticalSpeedPositive) {
-            verticalSpeedDisplay = "+" + verticalSpeedDisplay;
-        } else {
-            verticalSpeedDisplay = "-" + verticalSpeedDisplay; 
-        }
-
-        if(_isFpa) {
-            verticalSpeedDisplay = " " + verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 1) + " ";
-        } else {
-            // -5 parce que float 1600.00
-            verticalSpeedDisplay = verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 5) + "oo";
-        }
-    }
-
+void VerticalDisplayer::printDigit(String digit)
+{
     // V/S digit
     _screen->setCursor(X_OFFSET + 25, Y_OFFSET + 45);
     _screen->setFont(&DSEG7_Classic_Mini_Bold_25);
-    _screen->print(verticalSpeedDisplay);
-        
-    _screen->display();    
+    _screen->print(digit);
 }

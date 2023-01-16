@@ -35,10 +35,14 @@ void Displayer::begin()
 
     _screen->clearDisplay();
     _screen->setRotation(2);
-    _screen->setCursor(X_OFFSET + 15, Y_OFFSET + 16);
-    _screen->setFont(&Nimbus_Sans_L_Bold_16);
-    _screen->print(F("init display"));
     _screen->display();    
+}
+
+void Displayer::displayNone()
+{
+    selectScreen();
+    _screen->clearDisplay();
+    _screen->display(); 
 }
 
 /**

@@ -11,6 +11,9 @@ class FcuDisplayFrame {
         FcuDisplayFrame();
 
         void decode(struct can_frame *frame);
+
+        static void binaryConvert(int decimal, bool binaryArray[]);
+
         bool isMachSpeed;
         bool isTrackMode;
         bool isLatNavigation;
@@ -29,10 +32,7 @@ class FcuDisplayFrame {
         bool isSpeedHidden;
         bool isHeadingHidden;
         bool isAltitudeHidden;
-        bool isVerticalSpeedHidden;
-
-    private:
-        static void binaryConvert(int decimal, bool binaryArray[]);
+        bool isVerticalSpeedHidden;        
 
 };
 

@@ -9,9 +9,17 @@ class HeadingDisplayer : public Displayer {
         HeadingDisplayer(Adafruit_SSD1306 *screen, short indexDisplay);
 
         void display(FcuDisplayFrame *frame);
+        void displayTest();
+
         bool checkMutation(FcuDisplayFrame *frame);
 
     private:
+
+        void printHeadingIndicator();
+        void printTrackIndicator();
+        void printLatIndicator();
+        void printDigit(String digit);
+
         bool _isTrackMode;
         bool _isLatNavigation;
         bool _isHeadingHidden;

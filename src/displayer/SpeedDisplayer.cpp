@@ -32,6 +32,16 @@ bool SpeedDisplayer::checkMutation(FcuDisplayFrame *frame)
         _isSpeedForced != frame->isSpeedForced;
 }
 
+void SpeedDisplayer::displayTest()
+{
+    selectScreen();
+    _screen->clearDisplay();
+    printSpeedIndicator();
+    printMachIndicator();
+    printDigit(F("888*"));
+    _screen->display();
+}
+
 /**
  * @brief Rafraichissement l'écran avec les données de la frame
  * 
@@ -50,14 +60,10 @@ void SpeedDisplayer::display(FcuDisplayFrame *frame)
     String speedDisplay = "";
 
     if(_isMachSpeed) {
-        _screen->setCursor(X_OFFSET + 46, Y_OFFSET + 16);
-        _screen->setFont(&Nimbus_Sans_L_Bold_16);
-        _screen->print(F("MACH"));
+        printMachIndicator();
         speedDisplay = String(_speed);
     } else {
-        _screen->setCursor(X_OFFSET + 4, Y_OFFSET + 16);
-        _screen->setFont(&Nimbus_Sans_L_Bold_16);
-        _screen->print(F("SPD"));
+        printSpeedIndicator();
         speedDisplay = leftPad((int)_speed, 3);
     }
 
@@ -69,8 +75,27 @@ void SpeedDisplayer::display(FcuDisplayFrame *frame)
         speedDisplay += "*";
     }
 
+    printDigit(speedDisplay);
+    _screen->display();
+}
+
+void SpeedDisplayer::printSpeedIndicator()
+{
+    _screen->setCursor(X_OFFSET + 4, Y_OFFSET + 16);
+    _screen->setFont(&Nimbus_Sans_L_Bold_16);
+    _screen->print(F("SPD"));
+}
+
+void SpeedDisplayer::printMachIndicator()
+{
+    _screen->setCursor(X_OFFSET + 46, Y_OFFSET + 16);
+    _screen->setFont(&Nimbus_Sans_L_Bold_16);
+    _screen->print(F("MACH"));
+}
+
+void SpeedDisplayer::printDigit(String digit)
+{
     _screen->setCursor(X_OFFSET + 31, Y_OFFSET + 45);
     _screen->setFont(&DSEG7_Classic_Mini_Bold_25);
-    _screen->print(speedDisplay);
-    _screen->display();
+    _screen->print(digit);
 }

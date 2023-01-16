@@ -9,9 +9,16 @@ class SpeedDisplayer : public Displayer {
         SpeedDisplayer(Adafruit_SSD1306 *screen, short indexDisplay);
 
         void display(FcuDisplayFrame *frame);
+        void displayTest();
+
         bool checkMutation(FcuDisplayFrame *frame);
 
     private:
+
+        void printSpeedIndicator();
+        void printMachIndicator();
+        void printDigit(String digit);
+
         bool _isMachSpeed; 
         float _speed; 
         bool _isSpeedHidden;

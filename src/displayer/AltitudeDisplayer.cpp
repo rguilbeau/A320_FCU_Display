@@ -31,6 +31,15 @@ bool AltitudeDisplayer::checkMutation(FcuDisplayFrame *frame)
         _altitude != frame->altitude;
 }
 
+void AltitudeDisplayer::displayTest()
+{
+    selectScreen(); 
+    _screen->clearDisplay();
+    printFixedIndicator();
+    printDigit(F("88888*"));
+    _screen->display();
+}
+
 /**
  * @brief Rafraichissement l'écran avec les données de la frame
  * 
@@ -45,6 +54,26 @@ void AltitudeDisplayer::display(FcuDisplayFrame *frame)
     selectScreen(); 
     _screen->clearDisplay();
     
+    printFixedIndicator();
+
+    String altitudeDisplay;
+    if(_isAltitudeHidden) {
+        altitudeDisplay = "-----";
+    } else {
+        altitudeDisplay = leftPad(_altitude, 5);
+    }
+
+    if(!_isAltitudeForced) {
+        altitudeDisplay += "*";
+    }
+
+    printDigit(altitudeDisplay);
+        
+    _screen->display();    
+}
+
+void AltitudeDisplayer::printFixedIndicator()
+{
     //ALT
     _screen->setCursor(X_OFFSET + 24, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
@@ -58,22 +87,12 @@ void AltitudeDisplayer::display(FcuDisplayFrame *frame)
     _screen->setCursor(X_OFFSET + 93, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("LVL"));
+}
 
-    String altitudeDisplay;
-    if(_isAltitudeHidden) {
-        altitudeDisplay = "-----";
-    } else {
-        altitudeDisplay = leftPad(_altitude, 5);
-    }
-
-    if(!_isAltitudeForced) {
-        altitudeDisplay += "*";
-    }
-
+void AltitudeDisplayer::printDigit(String digit)
+{
     // ALT digit
     _screen->setCursor(X_OFFSET + 0, Y_OFFSET + 45);
     _screen->setFont(&DSEG7_Classic_Mini_Bold_25);
-    _screen->print(altitudeDisplay);
-        
-    _screen->display();    
+    _screen->print(digit);
 }

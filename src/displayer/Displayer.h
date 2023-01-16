@@ -15,7 +15,8 @@ class Displayer
         void begin();
 
         void setContrast(short value);
-
+        void displayNone();
+        
     protected:
         Displayer(Adafruit_SSD1306 *screen, short indexDisplay);
 

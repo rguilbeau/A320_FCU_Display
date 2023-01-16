@@ -30,6 +30,17 @@ bool NavModeDisplayer::checkMutation(FcuDisplayFrame *frame)
         _isFpa != frame->isFpa;
 }
 
+void NavModeDisplayer::displayTest()
+{
+    selectScreen();
+    _screen->clearDisplay();
+    printTrackIndicator();
+    printHeadingIndicator();
+    printFpaIndicator();
+    printVsIndicator();
+    _screen->display();
+}
+
 /**
  * @brief Rafraichissement l'écran avec les données de la frame
  * 
@@ -43,25 +54,45 @@ void NavModeDisplayer::display(FcuDisplayFrame *frame)
     selectScreen(); 
     _screen->clearDisplay();
     
-
-    _screen->setFont(&Nimbus_Sans_L_Bold_16);
-
-
     if(_isTrackMode) {
-        _screen->setCursor(X_OFFSET + 15, Y_OFFSET + 45);
-        _screen->print(F("TRK")); 
+        printTrackIndicator();
     } else {
-        _screen->setCursor(X_OFFSET + 15, Y_OFFSET + 30);
-        _screen->print(F("HDG"));  
+        printHeadingIndicator();
     }
 
     if(_isFpa) {
-        _screen->setCursor(X_OFFSET + 75, Y_OFFSET + 45);
-        _screen->print(F("FPA")); 
+        printFpaIndicator();
     } else {
-        _screen->setCursor(X_OFFSET + 75, Y_OFFSET + 30);
-        _screen->print(F("V/S"));  
+        printVsIndicator();
     }
     
     _screen->display();    
+}
+
+void NavModeDisplayer::printTrackIndicator()
+{
+    _screen->setFont(&Nimbus_Sans_L_Bold_16);
+    _screen->setCursor(X_OFFSET + 15, Y_OFFSET + 45);
+    _screen->print(F("TRK")); 
+}
+
+void NavModeDisplayer::printHeadingIndicator()
+{
+    _screen->setFont(&Nimbus_Sans_L_Bold_16);
+    _screen->setCursor(X_OFFSET + 15, Y_OFFSET + 30);
+    _screen->print(F("HDG"));  
+}
+
+void NavModeDisplayer::printFpaIndicator()
+{
+    _screen->setFont(&Nimbus_Sans_L_Bold_16);
+    _screen->setCursor(X_OFFSET + 75, Y_OFFSET + 45);
+    _screen->print(F("FPA")); 
+}
+
+void NavModeDisplayer::printVsIndicator()
+{
+    _screen->setFont(&Nimbus_Sans_L_Bold_16);
+    _screen->setCursor(X_OFFSET + 75, Y_OFFSET + 30);
+    _screen->print(F("V/S"));  
 }

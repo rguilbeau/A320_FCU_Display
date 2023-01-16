@@ -30,6 +30,8 @@ VerticalDisplayer verticalDisplayer(&display, OLED_VERTICAL_INDEX);
 
 // Flag pour forcer la 1ère mise à jour
 bool firstInit = true;
+bool isLightTestMode = false;
+bool isPowerOff = true;
 
 /**
  * @brief Initialisation des écrans et du CAN Bus
@@ -60,7 +62,6 @@ void setup() {
  * 
  */
 void loop() {
-
   // Récétion des messages du CAN Bus
   MCP2515::ERROR error = mcp2515.readMessage(&frame);
 
@@ -78,7 +79,7 @@ void loop() {
      *  Gestion du rétroéclairage des écrans
      */
     if(frame.can_id == 0xC8) {
-      short contrast = (short)frame.data[0];
+      short contrast = (short)frame.data[1];
       if(contrast > 100) {
         contrast = 100;
       }
@@ -87,7 +88,31 @@ void loop() {
       navModeDisplayer.setContrast(contrast);
       altitudeDisplayer.setContrast(contrast);
       verticalDisplayer.setContrast(contrast);
+
+      bool testLight[] = {0,0,0,0,0,0,0,0};
+      FcuDisplayFrame::binaryConvert(frame.data[0], testLight);
+
+      if(testLight[0]) {
+        isLightTestMode = true;
+      } else {
+        isLightTestMode = false;
+        firstInit = true;
+      }
     }
+
+
+    else if(frame.can_id == 0x12C) {
+      bool electBus[] = {0,0,0,0,0,0,0,0};
+      FcuDisplayFrame::binaryConvert(frame.data[0], electBus);
+
+      if(electBus[0]) {
+        isPowerOff = false;
+        firstInit = true;
+      } else {
+        isPowerOff = true;
+      }
+    }
+
 
     /**
      * Mise à jour des écrans avec les informations
@@ -95,7 +120,21 @@ void loop() {
      */
     else if(frame.can_id == 0x64) {
       fcuDisplayFrame.decode(&frame);
+    }
 
+    if(isPowerOff){
+      speedDisplayer.displayNone();
+      headingDisplayer.displayNone();
+      navModeDisplayer.displayNone();
+      altitudeDisplayer.displayNone();
+      verticalDisplayer.displayNone();
+    } else if(isLightTestMode) {
+      speedDisplayer.displayTest();
+      headingDisplayer.displayTest();
+      navModeDisplayer.displayTest();
+      altitudeDisplayer.displayTest();
+      verticalDisplayer.displayTest();
+    } else {
       if(speedDisplayer.checkMutation(&fcuDisplayFrame) || firstInit) {
         speedDisplayer.display(&fcuDisplayFrame);
       }

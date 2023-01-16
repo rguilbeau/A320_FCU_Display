@@ -9,9 +9,16 @@ class NavModeDisplayer : public Displayer {
         NavModeDisplayer(Adafruit_SSD1306 *screen, short indexDisplay);
 
         void display(FcuDisplayFrame *frame);
+        void displayTest();
+
         bool checkMutation(FcuDisplayFrame *frame);
 
     private:
+        void printTrackIndicator();
+        void printHeadingIndicator();
+        void printFpaIndicator();
+        void printVsIndicator();
+
         bool _isTrackMode;
         bool _isFpa;
 };
