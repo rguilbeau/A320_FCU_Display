@@ -78,7 +78,7 @@ void loop() {
     /**
      *  Gestion du rétroéclairage des écrans
      */
-    if(frame.can_id == 0xC8) {
+    if(frame.can_id == 0x65) {
       short contrast = (short)frame.data[1];
       if(contrast > 100) {
         contrast = 100;
