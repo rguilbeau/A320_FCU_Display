@@ -22,6 +22,7 @@ class FcuDisplayFrame {
         bool isHeadingForced;
         bool isAltitudeForced;
         bool isVerticalSpeedPositive;
+        bool isPowerOn;
     
         float speed;
         unsigned short heading;

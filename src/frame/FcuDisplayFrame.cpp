@@ -68,6 +68,7 @@ void FcuDisplayFrame::decode(struct can_frame *frame)
     isHeadingHidden = binaryDigitHidden[1];
     isAltitudeHidden = binaryDigitHidden[2];
     isVerticalSpeedHidden = binaryDigitHidden[3];
+    isPowerOn = binaryDigitHidden[7];
 }
 
 /**

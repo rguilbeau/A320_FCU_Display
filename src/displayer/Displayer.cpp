@@ -69,6 +69,7 @@ void Displayer::setContrast(short value)
 {
     selectScreen();
     _screen->setContrast(value);
+    SERIAL_PRINTLN("SET CONTRAST " + String(value));
 }
 
 /**
@@ -82,5 +83,6 @@ void Displayer::selectScreen()
         Wire.write(1 << _indexDisplay);
         Wire.endTransmission();
         Displayer::_selectedScreen = _indexDisplay;
+        SERIAL_PRINTLN("SELECT " + String(Displayer::_selectedScreen));
     }
 }
