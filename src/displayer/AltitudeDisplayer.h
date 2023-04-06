@@ -1,7 +1,9 @@
 #ifndef FCU_ALTITUDE_DISPLAYER_H
 #define FCU_ALTITUDE_DISPLAYER_H
 
-#include "Displayer.h"
+#include "Setup.h"
+#include "core/displayer/Displayer.h"
+#include "frame/FcuDisplayFrame.h"
 
 class AltitudeDisplayer : public Displayer {
 
@@ -18,8 +20,8 @@ class AltitudeDisplayer : public Displayer {
         void printFixedIndicator();
         void printDigit(String altitude);
 
-        bool _isAltitudeHidden;
-        bool _isAltitudeForced;
+        bool _isAltitudeDash;
+        bool _isAltitudeDot;
         int _altitude;
 };
 

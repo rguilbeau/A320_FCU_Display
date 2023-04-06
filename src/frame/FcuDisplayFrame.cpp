@@ -29,9 +29,9 @@ void FcuDisplayFrame::decode(struct can_frame *frame)
     isTrackMode = binaryIndicators[1];
     isLatNavigation = binaryIndicators[2];
     isFpa = binaryIndicators[3];
-    isSpeedForced = binaryIndicators[4];
-    isHeadingForced = binaryIndicators[5];
-    isAltitudeForced = binaryIndicators[6];
+    isSpeedDot = binaryIndicators[4];
+    isHeadingDot = binaryIndicators[5];
+    isAltitudeDot = binaryIndicators[6];
     isVerticalSpeedPositive = binaryIndicators[7];
 
     speed = frame->data[0];
@@ -64,10 +64,10 @@ void FcuDisplayFrame::decode(struct can_frame *frame)
         verticalSpeed = frame->data[6] * 100;
     }
 
-    isSpeedHidden = binaryDigitHidden[0];
-    isHeadingHidden = binaryDigitHidden[1];
-    isAltitudeHidden = binaryDigitHidden[2];
-    isVerticalSpeedHidden = binaryDigitHidden[3];
+    isSpeedDash = binaryDigitHidden[0];
+    isHeadingDash = binaryDigitHidden[1];
+    isAltitudeDash = binaryDigitHidden[2];
+    isVerticalSpeedDash = binaryDigitHidden[3];
     isPowerOn = binaryDigitHidden[7];
 }
 

@@ -29,7 +29,7 @@ bool VerticalDisplayer::checkMutation(FcuDisplayFrame *frame)
         _isFpa != frame->isFpa ||
         _verticalSpeed != frame->verticalSpeed ||
         _isVerticalSpeedPositive != frame->isVerticalSpeedPositive ||
-        _isVerticalSpeedHidden != frame->isVerticalSpeedHidden;
+        _isVerticalSpeedDash != frame->isVerticalSpeedDash;
 }
 
 void VerticalDisplayer::displayTest()
@@ -55,7 +55,7 @@ void VerticalDisplayer::display(FcuDisplayFrame *frame)
     _isFpa = frame->isFpa;
     _verticalSpeed = frame->verticalSpeed;
     _isVerticalSpeedPositive = frame->isVerticalSpeedPositive;
-    _isVerticalSpeedHidden = frame->isVerticalSpeedHidden;
+    _isVerticalSpeedDash = frame->isVerticalSpeedDash;
 
     selectScreen(); 
     _screen->clearDisplay();
@@ -70,7 +70,7 @@ void VerticalDisplayer::display(FcuDisplayFrame *frame)
 
     String verticalSpeedDisplay;
     
-    if(_isVerticalSpeedHidden) {
+    if(_isVerticalSpeedDash) {
         verticalSpeedDisplay = "-----";
     } else {
         if(_isFpa) {

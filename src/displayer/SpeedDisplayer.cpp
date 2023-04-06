@@ -28,8 +28,8 @@ bool SpeedDisplayer::checkMutation(FcuDisplayFrame *frame)
     return 
         _isMachSpeed != frame->isMachSpeed ||
         _speed != frame->speed ||
-        _isSpeedHidden != frame->isSpeedHidden ||
-        _isSpeedForced != frame->isSpeedForced;
+        _isSpeedDash != frame->isSpeedDash ||
+        _isSpeedDot != frame->isSpeedDot;
 }
 
 void SpeedDisplayer::displayTest()
@@ -51,8 +51,8 @@ void SpeedDisplayer::display(FcuDisplayFrame *frame)
 {
     _isMachSpeed = frame->isMachSpeed;
     _speed = frame->speed;
-    _isSpeedHidden = frame->isSpeedHidden;
-    _isSpeedForced = frame->isSpeedForced;
+    _isSpeedDash = frame->isSpeedDash;
+    _isSpeedDot = frame->isSpeedDot;
 
     selectScreen();
 
@@ -67,11 +67,11 @@ void SpeedDisplayer::display(FcuDisplayFrame *frame)
         speedDisplay = leftPad((int)_speed, 3);
     }
 
-    if(_isSpeedHidden) {
+    if(_isSpeedDash) {
         speedDisplay = "---";
     }
 
-    if(!_isSpeedForced) {
+    if(_isSpeedDot) {
         speedDisplay += "*";
     }
 

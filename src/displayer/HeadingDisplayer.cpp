@@ -29,8 +29,8 @@ bool HeadingDisplayer::checkMutation(FcuDisplayFrame *frame)
         _isTrackMode != frame->isTrackMode ||
         _isLatNavigation !=  frame->isLatNavigation ||
         _heading != frame->heading ||
-        _isHeadingHidden != frame->isHeadingHidden ||
-        _isHeadingForced != frame->isHeadingForced;
+        _isHeadingDash != frame->isHeadingDash ||
+        _isHeadingDot != frame->isHeadingDot;
 }
 
 void HeadingDisplayer::displayTest()
@@ -54,8 +54,8 @@ void HeadingDisplayer::display(FcuDisplayFrame *frame)
     _isTrackMode = frame->isTrackMode;
     _isLatNavigation = frame->isLatNavigation;
     _heading = frame->heading;
-    _isHeadingHidden = frame->isHeadingHidden;
-    _isHeadingForced = frame->isHeadingForced;
+    _isHeadingDash = frame->isHeadingDash;
+    _isHeadingDot = frame->isHeadingDot;
 
     selectScreen();
     _screen->clearDisplay();
@@ -72,13 +72,13 @@ void HeadingDisplayer::display(FcuDisplayFrame *frame)
     }
 
     String headingDisplay;
-    if(_isHeadingHidden) {
+    if(_isHeadingDash) {
         headingDisplay = "---";
     } else {
         headingDisplay = leftPad(_heading, 3);
     }
 
-    if(!_isHeadingForced) {
+    if(_isHeadingDot) {
         headingDisplay += "*";
     }
 

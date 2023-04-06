@@ -1,7 +1,9 @@
 #ifndef FCU_HEADING_DISPLAYER_H
 #define FCU_HEADING_DISPLAYER_H
 
-#include "Displayer.h"
+#include "Setup.h"
+#include "core/displayer/Displayer.h"
+#include "frame/FcuDisplayFrame.h"
 
 class HeadingDisplayer : public Displayer {
 
@@ -22,8 +24,8 @@ class HeadingDisplayer : public Displayer {
 
         bool _isTrackMode;
         bool _isLatNavigation;
-        bool _isHeadingHidden;
-        bool _isHeadingForced;
+        bool _isHeadingDash;
+        bool _isHeadingDot;
         unsigned short _heading;
 
 };

@@ -1,7 +1,9 @@
 #ifndef FCU_NAV_MODE_DISPLAYER_H
 #define FCU_NAV_MODE_DISPLAYER_H
 
-#include "Displayer.h"
+#include "Setup.h"
+#include "core/displayer/Displayer.h"
+#include "frame/FcuDisplayFrame.h"
 
 class NavModeDisplayer : public Displayer {
 

@@ -26,8 +26,8 @@ AltitudeDisplayer::AltitudeDisplayer(
 bool AltitudeDisplayer::checkMutation(FcuDisplayFrame *frame)
 {
     return 
-        _isAltitudeHidden != frame->isAltitudeHidden ||
-        _isAltitudeForced != frame->isAltitudeForced ||
+        _isAltitudeDash != frame->isAltitudeDash ||
+        _isAltitudeDot != frame->isAltitudeDot ||
         _altitude != frame->altitude;
 }
 
@@ -47,8 +47,8 @@ void AltitudeDisplayer::displayTest()
  */
 void AltitudeDisplayer::display(FcuDisplayFrame *frame)
 {
-    _isAltitudeHidden = frame->isAltitudeHidden;
-    _isAltitudeForced = frame->isAltitudeForced;
+    _isAltitudeDash = frame->isAltitudeDash;
+    _isAltitudeDot = frame->isAltitudeDot;
     _altitude = frame->altitude;
 
     selectScreen(); 
@@ -57,13 +57,13 @@ void AltitudeDisplayer::display(FcuDisplayFrame *frame)
     printFixedIndicator();
 
     String altitudeDisplay;
-    if(_isAltitudeHidden) {
+    if(_isAltitudeDash) {
         altitudeDisplay = "-----";
     } else {
         altitudeDisplay = leftPad(_altitude, 5);
     }
 
-    if(!_isAltitudeForced) {
+    if(_isAltitudeDot) {
         altitudeDisplay += "*";
     }
 

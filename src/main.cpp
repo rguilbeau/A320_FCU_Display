@@ -49,11 +49,11 @@ void setup() {
   SERIAL_PRINTLN(F("Starting..."));
 
   Wire.begin();
-  speedDisplayer.begin();
-  headingDisplayer.begin();
-  navModeDisplayer.begin();
-  altitudeDisplayer.begin();
-  verticalDisplayer.begin();
+  speedDisplayer.begin(SCREEN_ADDRESS);
+  headingDisplayer.begin(SCREEN_ADDRESS);
+  navModeDisplayer.begin(SCREEN_ADDRESS);
+  altitudeDisplayer.begin(SCREEN_ADDRESS);
+  verticalDisplayer.begin(SCREEN_ADDRESS);
 
   mcp2515.reset();
   mcp2515.setBitrate(CAN_125KBPS, MCP_8MHZ);

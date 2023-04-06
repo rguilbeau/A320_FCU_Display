@@ -1,7 +1,9 @@
 #ifndef FCU_SPEED_DISPLAYER_H
 #define FCU_SPEED_DISPLAYER_H
 
-#include "Displayer.h"
+#include "Setup.h"
+#include "core/displayer/Displayer.h"
+#include "frame/FcuDisplayFrame.h"
 
 class SpeedDisplayer : public Displayer {
 
@@ -21,8 +23,8 @@ class SpeedDisplayer : public Displayer {
 
         bool _isMachSpeed; 
         float _speed; 
-        bool _isSpeedHidden;
-        bool _isSpeedForced;
+        bool _isSpeedDash;
+        bool _isSpeedDot;
 };
 
 #endif

@@ -18,9 +18,9 @@ class FcuDisplayFrame {
         bool isTrackMode;
         bool isLatNavigation;
         bool isFpa;
-        bool isSpeedForced;
-        bool isHeadingForced;
-        bool isAltitudeForced;
+        bool isSpeedDot;
+        bool isHeadingDot;
+        bool isAltitudeDot;
         bool isVerticalSpeedPositive;
         bool isPowerOn;
     
@@ -30,10 +30,10 @@ class FcuDisplayFrame {
         int altitude;
 
         float verticalSpeed;
-        bool isSpeedHidden;
-        bool isHeadingHidden;
-        bool isAltitudeHidden;
-        bool isVerticalSpeedHidden;        
+        bool isSpeedDash;
+        bool isHeadingDash;
+        bool isAltitudeDash;
+        bool isVerticalSpeedDash;        
 
 };
 
