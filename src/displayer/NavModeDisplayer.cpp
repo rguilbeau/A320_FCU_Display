@@ -72,7 +72,7 @@ void NavModeDisplayer::display(FcuDisplayFrame *frame)
 void NavModeDisplayer::printTrackIndicator()
 {
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
-    _screen->setCursor(X_OFFSET + 15, Y_OFFSET + 45);
+    _screen->setCursor(X_OFFSET + 17, Y_OFFSET + 45);
     _screen->print(F("TRK")); 
 }
 

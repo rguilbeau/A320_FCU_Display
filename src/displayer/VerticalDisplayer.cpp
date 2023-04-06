@@ -97,25 +97,25 @@ void VerticalDisplayer::display(FcuDisplayFrame *frame)
 void VerticalDisplayer::printFixedIndicator()
 {
     // CH
-    _screen->setCursor(X_OFFSET + 4, Y_OFFSET + 16);
+    _screen->setCursor(X_OFFSET + 0, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("CH"));
 
     // ARROW RIGHT
-    _screen->fillRect(X_OFFSET + 32, Y_OFFSET + 10, 24, 2, SSD1306_WHITE);
-    _screen->fillRect(X_OFFSET + 54, Y_OFFSET + 12, 2, 3, SSD1306_WHITE);
+    _screen->fillRect(X_OFFSET + 28, Y_OFFSET + 10, 24, 3, SSD1306_WHITE);
+    _screen->fillRect(X_OFFSET + 49, Y_OFFSET + 12, 3, 3, SSD1306_WHITE);
 }
 
 void VerticalDisplayer::printVsSpeedIndicator()
 {
-    _screen->setCursor(X_OFFSET + 64, Y_OFFSET + 16);
+    _screen->setCursor(X_OFFSET + 60, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("V/S"));  
 }
 
 void VerticalDisplayer::printFpaIndicator()
 {
-    _screen->setCursor(X_OFFSET + 93, Y_OFFSET + 16);
+    _screen->setCursor(X_OFFSET + 88, Y_OFFSET + 16);
     _screen->setFont(&Nimbus_Sans_L_Bold_16);
     _screen->print(F("FPA"));
 }
@@ -123,7 +123,7 @@ void VerticalDisplayer::printFpaIndicator()
 void VerticalDisplayer::printDigit(String digit)
 {
     // V/S digit
-    _screen->setCursor(X_OFFSET + 25, Y_OFFSET + 45);
+    _screen->setCursor(X_OFFSET + 21, Y_OFFSET + 45);
     _screen->setFont(&DSEG7_Classic_Mini_Bold_25);
     _screen->print(digit);
 }

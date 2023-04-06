@@ -80,8 +80,8 @@ void AltitudeDisplayer::printFixedIndicator()
     _screen->print(F("ALT"));
 
     // ARROW LEFT
-    _screen->fillRect(X_OFFSET + 65, Y_OFFSET + 10, 24, 2, SSD1306_WHITE);
-    _screen->fillRect(X_OFFSET + 65, Y_OFFSET + 12, 2, 3, SSD1306_WHITE);
+    _screen->fillRect(X_OFFSET + 65, Y_OFFSET + 10, 24, 3, SSD1306_WHITE);
+    _screen->fillRect(X_OFFSET + 65, Y_OFFSET + 12, 3, 4, SSD1306_WHITE);
 
     //LVL
     _screen->setCursor(X_OFFSET + 93, Y_OFFSET + 16);

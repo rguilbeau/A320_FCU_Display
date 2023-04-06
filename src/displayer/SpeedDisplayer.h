@@ -3,7 +3,7 @@
 
 #include "Setup.h"
 #include "core/displayer/Displayer.h"
-#include "frame/FcuDisplayFrame.h"
+#include "core/can_bus/frame/glareshield/FcuDisplayFrame.h"
 
 class SpeedDisplayer : public Displayer {
 
