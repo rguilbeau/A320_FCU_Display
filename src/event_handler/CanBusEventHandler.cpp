@@ -20,7 +20,7 @@ void CanBusEventHandler::frameReceived(Frame *frame)
     SERIAL_PRINTLN("frame " + String(frame->getId()));
     
     switch (frame->getId()) {
-        case FRAME_ID_FCU_DISPLAY:
+        case FcuDisplayFrame::ID :
             _fcuDisplayFrame.decode(frame);
 
             if(!_fcuDisplayFrame.isPowerOn) {
@@ -29,30 +29,26 @@ void CanBusEventHandler::frameReceived(Frame *frame)
                 display();
             }
             break;
-        case FRAME_ID_LIGHT_INDICATORS:
-            _lightIndicatorsFrame.decode(frame);
+        case BrightnessFrame::ID :
+            _brightnessFrame.decode(frame);
+            setContrast();
 
-            if(_lightIndicatorsFrame.isTestLight) {
+            if(_brightnessFrame.testLight) {
                 setTestLightIndicators();
             } else {
                 display();
             }
-            break;
-        case FRAME_ID_BRIGHTNESS:
-            _brightnessFrame.decode(frame);
-
-            //setContrast();
             break;
     }
 }
 
 void CanBusEventHandler::setContrast()
 {
-    _speedDisplayer->setContrast(_brightnessFrame.fcuDisplayContrast);
-    _headingDisplayer->setContrast(_brightnessFrame.fcuDisplayContrast);
-    _navModeDisplayer->setContrast(_brightnessFrame.fcuDisplayContrast);
-    _altitudeDisplayer->setContrast(_brightnessFrame.fcuDisplayContrast);
-    _verticalDisplayer->setContrast(_brightnessFrame.fcuDisplayContrast);
+    _speedDisplayer->setContrast(_brightnessFrame.segmentsScreens);
+    _headingDisplayer->setContrast(_brightnessFrame.segmentsScreens);
+    _navModeDisplayer->setContrast(_brightnessFrame.segmentsScreens);
+    _altitudeDisplayer->setContrast(_brightnessFrame.segmentsScreens);
+    _verticalDisplayer->setContrast(_brightnessFrame.segmentsScreens);
 }
 
 void CanBusEventHandler::setTestLightIndicators()

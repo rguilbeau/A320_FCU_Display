@@ -2,8 +2,8 @@
 #define FCU_HEADING_DISPLAYER_H
 
 #include "Setup.h"
-#include "core/displayer/Displayer.h"
-#include "core/can_bus/frame/glareshield/FcuDisplayFrame.h"
+#include "A320_Displayer/Displayer.h"
+#include "A320_Core/can_bus/frame/glareshield/FcuDisplayFrame.h"
 
 class HeadingDisplayer : public Displayer {
 

@@ -4,9 +4,8 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include <mcp2515.h>
+
+#include "A320_Core/can_bus/CanBus.h"
 
 #include "displayer/SpeedDisplayer.h"
 #include "displayer/HeadingDisplayer.h"
@@ -14,8 +13,13 @@
 #include "displayer/AltitudeDisplayer.h"
 #include "displayer/VerticalDisplayer.h"
 
-#include "core/can_bus/CanBus.h"
 #include "event_handler/CanBusEventHandler.h"
+
+const unsigned int numberFilters = 2;
+const unsigned long filters[numberFilters] = {
+  FcuDisplayFrame::ID,
+  BrightnessFrame::ID
+};
 
 // Initialisation des objets des afficheurs
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -52,11 +56,13 @@ void setup() {
   altitudeDisplayer.begin(SCREEN_ADDRESS);
   verticalDisplayer.begin(SCREEN_ADDRESS);
 
-  canbus.begin();
+  canbus.begin(filters, numberFilters);
   delay(3000);
 
   SERIAL_PRINTLN(F("Started !"));
 }
+
+unsigned long lastTime = millis();
 
 /**
  * @brief Attente et traitement des messages du CAN Bus

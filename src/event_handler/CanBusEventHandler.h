@@ -2,11 +2,10 @@
 #define FCU_DISPLAY_FRAME_RECEIVE_HANDLER_H
 
 #include "Setup.h"
-#include "core/event/CanBusFrameEvent.h"
+#include "A320_Core/event/CanBusFrameEvent.h"
 
-#include "core/can_bus/frame/brightness/BrightnessFrame.h"
-#include "core/can_bus/frame/glareshield/FcuDisplayFrame.h"
-#include "core/can_bus/frame/overhead/LightIndicatorsFrame.h"
+#include "A320_Core/can_bus/frame/brightness/BrightnessFrame.h"
+#include "A320_Core/can_bus/frame/glareshield/FcuDisplayFrame.h"
 
 #include "displayer/SpeedDisplayer.h"
 #include "displayer/HeadingDisplayer.h"
@@ -29,7 +28,6 @@ public:
 
 private:
     BrightnessFrame _brightnessFrame;
-    LightIndicatorsFrame _lightIndicatorsFrame;
     FcuDisplayFrame _fcuDisplayFrame;
 
     SpeedDisplayer *_speedDisplayer;
