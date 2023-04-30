@@ -18,7 +18,7 @@
 const unsigned int numberFilters = 2;
 const unsigned long filters[numberFilters] = {
   FcuDisplayFrame::ID,
-  BrightnessFrame::ID
+  BrightnessSevenSegmentsFrame::ID
 };
 
 // Initialisation des objets des afficheurs

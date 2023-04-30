@@ -22,33 +22,44 @@ void CanBusEventHandler::frameReceived(Frame *frame)
     switch (frame->getId()) {
         case FcuDisplayFrame::ID :
             _fcuDisplayFrame.decode(frame);
-
-            if(!_fcuDisplayFrame.isPowerOn) {
-                setPowerOff();
-            } else {
+            if(_brightnessSevenSegmentsFrame.fcu != 0x0) {
                 display();
             }
             break;
-        case BrightnessFrame::ID :
-            _brightnessFrame.decode(frame);
-            setContrast();
-
-            if(_brightnessFrame.testLight) {
+        case BrightnessSevenSegmentsFrame::ID :
+            _brightnessSevenSegmentsFrame.decode(frame);
+            
+            setContrast(_brightnessSevenSegmentsFrame.fcu);
+            
+            if(_brightnessSevenSegmentsFrame.fcu == 0x0) {
+                displayNone();
+            } else if(_brightnessSevenSegmentsFrame.isTestLight) {
                 setTestLightIndicators();
             } else {
                 display();
             }
+            
             break;
     }
 }
 
-void CanBusEventHandler::setContrast()
+void CanBusEventHandler::setContrast(unsigned char contrast)
 {
-    _speedDisplayer->setContrast(_brightnessFrame.segmentsScreens);
-    _headingDisplayer->setContrast(_brightnessFrame.segmentsScreens);
-    _navModeDisplayer->setContrast(_brightnessFrame.segmentsScreens);
-    _altitudeDisplayer->setContrast(_brightnessFrame.segmentsScreens);
-    _verticalDisplayer->setContrast(_brightnessFrame.segmentsScreens);
+    _speedDisplayer->setContrast(contrast);
+    _headingDisplayer->setContrast(contrast);
+    _navModeDisplayer->setContrast(contrast);
+    _altitudeDisplayer->setContrast(contrast);
+    _verticalDisplayer->setContrast(contrast);
+}
+
+void CanBusEventHandler::displayNone()
+{
+    _speedDisplayer->displayNone();
+    _headingDisplayer->displayNone();
+    _navModeDisplayer->displayNone();
+    _altitudeDisplayer->displayNone();
+    _verticalDisplayer->displayNone();
+    _forceRefreshDisplay = true;
 }
 
 void CanBusEventHandler::setTestLightIndicators()
@@ -58,16 +69,6 @@ void CanBusEventHandler::setTestLightIndicators()
     _navModeDisplayer->displayTest();
     _altitudeDisplayer->displayTest();
     _verticalDisplayer->displayTest();
-    _forceRefreshDisplay = true;
-}
-
-void CanBusEventHandler::setPowerOff()
-{
-    _speedDisplayer->displayNone();
-    _headingDisplayer->displayNone();
-    _navModeDisplayer->displayNone();
-    _altitudeDisplayer->displayNone();
-    _verticalDisplayer->displayNone();
     _forceRefreshDisplay = true;
 }
 

@@ -4,7 +4,7 @@
 #include "Setup.h"
 #include "A320_Core/event/CanBusFrameEvent.h"
 
-#include "A320_Core/can_bus/frame/brightness/BrightnessFrame.h"
+#include "A320_Core/can_bus/frame/brightness/BrightnessSevenSegmentsFrame.h"
 #include "A320_Core/can_bus/frame/glareshield/FcuDisplayFrame.h"
 
 #include "displayer/SpeedDisplayer.h"
@@ -27,7 +27,7 @@ public:
     void frameReceived(Frame *frame) override;
 
 private:
-    BrightnessFrame _brightnessFrame;
+    BrightnessSevenSegmentsFrame _brightnessSevenSegmentsFrame;
     FcuDisplayFrame _fcuDisplayFrame;
 
     SpeedDisplayer *_speedDisplayer;
@@ -38,9 +38,9 @@ private:
 
     bool _forceRefreshDisplay;
 
-    void setContrast();
+    void setContrast(unsigned char contrast);
+    void displayNone();
     void setTestLightIndicators();
-    void setPowerOff();
     void display();
 };
 
