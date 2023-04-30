@@ -22,7 +22,7 @@ void CanBusEventHandler::frameReceived(Frame *frame)
     switch (frame->getId()) {
         case FcuDisplayFrame::ID :
             _fcuDisplayFrame.decode(frame);
-            if(_brightnessSevenSegmentsFrame.fcu != 0x0) {
+            if(_brightnessSevenSegmentsFrame.fcu != 0x0 && !_brightnessSevenSegmentsFrame.isTestLight) {
                 display();
             }
             break;
