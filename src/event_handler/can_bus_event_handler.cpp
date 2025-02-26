@@ -43,10 +43,10 @@ void CanBusEventHandler::frameReceived(const Frame &frame)
         {
             m_brightnessPanelFrame = brightnessPanelFrame;
 
-            setContrast(m_brightnessPanelFrame.getGlarshield());
+            setContrast(m_brightnessPanelFrame.getDisplayGlareshield());
         }
         
-        if(m_brightnessPanelFrame.getGlarshield() == 0) 
+        if(m_brightnessPanelFrame.getDisplayGlareshield() == 0) 
         {
             displayNone();
         }
