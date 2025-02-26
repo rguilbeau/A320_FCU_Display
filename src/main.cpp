@@ -1,24 +1,23 @@
-
-#include "Setup.h"
+#include "setup.h"
 
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
 
-#include "A320_Core/can_bus/CanBus.h"
+#include "can_bus/can_bus.hpp"
+#include "event_handler/can_bus_event_handler.hpp"
 
-#include "displayer/SpeedDisplayer.h"
-#include "displayer/HeadingDisplayer.h"
-#include "displayer/NavModeDisplayer.h"
-#include "displayer/AltitudeDisplayer.h"
-#include "displayer/VerticalDisplayer.h"
+#include "displayer/speed_displayer.hpp"
+#include "displayer/heading_displayer.hpp"
+#include "displayer/nav_mode_displayer.hpp"
+#include "displayer/altitude_displayer.hpp"
+#include "displayer/vertical_displayer.hpp"
 
-#include "event_handler/CanBusEventHandler.h"
-
-const unsigned int numberFilters = 2;
-const unsigned long filters[numberFilters] = {
-  FcuDisplayFrame::ID,
-  BrightnessSevenSegmentsFrame::ID
+const uint16_t numberFilters = 2;
+const uint32_t filters[numberFilters] = 
+{
+  e_frameId::FCU_DISPLAY,
+  e_frameId::BRIGTNESS_PANEL
 };
 
 // Initialisation des objets des afficheurs
@@ -44,7 +43,8 @@ CanBus canbus(
  * @brief Initialisation des écrans et du CAN Bus
  * 
  */
-void setup() {
+void setup() 
+{
   SERIAL_BEGIN(9600);
 
   SERIAL_PRINTLN(F("Starting..."));
@@ -68,6 +68,7 @@ unsigned long lastTime = millis();
  * @brief Attente et traitement des messages du CAN Bus
  * 
  */
-void loop() {
+void loop() 
+{
   canbus.loop();
 }
