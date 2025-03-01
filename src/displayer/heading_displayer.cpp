@@ -11,50 +11,54 @@ HeadingDisplayer::HeadingDisplayer(Adafruit_SSD1306 *pScreen, const int8_t &nInd
 
 }
 
-/**
- * @brief Vérification si la frame passée en paramètre contient des valeurs différents de celles déjà affichées sur l'écran
- * 
- * @param frame La frame
- * @return true Des modifications sont présentes, un rafraichissement de l'écran est requis
- * @return false Aucune modification, le rafraichissement de l'écran n'est pas nécéssaire
- */
-bool HeadingDisplayer::checkMutation(const FrameFcuDisplay &frame)
+
+void HeadingDisplayer::setFrame(const FrameFcuDisplay &frame)
 {
-    return 
-        m_bIsTrackMode != frame.isTrack() ||
-        m_bIsLatNavigation != frame.isLat() ||
-        m_nHeading != frame.getHeading() ||
-        m_bIsHeadingDash != frame.isHeadingDashed() ||
-        m_bIsHeadingDot != frame.isHeadingDot();
+    if(m_bIsTrackMode != frame.isTrack())
+    {
+        m_bIsTrackMode = frame.isTrack();
+        m_bMutation = true;
+    }
+
+    if(m_bIsLatNavigation != frame.isLat())
+    {
+        m_bIsLatNavigation = frame.isLat();
+        m_bMutation = true;
+    }
+
+    if(m_nHeading != frame.getHeading())
+    {
+        m_nHeading = frame.getHeading();
+        m_bMutation = true;
+    }
+
+    if(m_bIsHeadingDash != frame.isHeadingDashed())
+    {
+        m_bIsHeadingDash = frame.isHeadingDashed();
+        m_bMutation = true;
+    }
+
+    if(m_bIsHeadingDot != frame.isHeadingDot())
+    {
+        m_bIsHeadingDot = frame.isHeadingDot();
+        m_bMutation = true;
+    }
 }
 
-void HeadingDisplayer::displayTest()
+bool HeadingDisplayer::checkMutation()
 {
-    selectScreen();
-    m_pScreen->clearDisplay();
-    printHeadingIndicator();
-    printTrackIndicator();
-    printLatIndicator();
-    printDigit(F("888*"));
-    m_pScreen->display();
+    if(m_bMutation)
+    {
+        m_bMutation = false;
+        return true;
+    }
+
+    return false;
 }
 
-/**
- * @brief Rafraichissement l'écran avec les données de la frame
- * 
- * @param frame La nouvelle frame
- */
-void HeadingDisplayer::display(const FrameFcuDisplay &frame)
-{
-    m_bIsTrackMode = frame.isTrack();
-    m_bIsLatNavigation = frame.isLat();
-    m_nHeading = frame.getHeading();
-    m_bIsHeadingDash = frame.isHeadingDashed();
-    m_bIsHeadingDot = frame.isHeadingDot();
 
-    selectScreen();
-    m_pScreen->clearDisplay();
-    
+void HeadingDisplayer::display()
+{
     if(m_bIsTrackMode) 
     {
         printTrackIndicator();
@@ -87,8 +91,14 @@ void HeadingDisplayer::display(const FrameFcuDisplay &frame)
 
     // HDG digit
     printDigit(sHeadingDisplay);
+}
 
-    m_pScreen->display();    
+void HeadingDisplayer::displayTestLight()
+{
+    printHeadingIndicator();
+    printTrackIndicator();
+    printLatIndicator();
+    printDigit(F("888*"));
 }
 
 void HeadingDisplayer::printHeadingIndicator()

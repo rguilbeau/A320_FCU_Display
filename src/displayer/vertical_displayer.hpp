@@ -11,10 +11,11 @@ public:
     explicit VerticalDisplayer(Adafruit_SSD1306 *pScreen, const int8_t &nIndexDisplay);
     virtual ~VerticalDisplayer() = default;
 
-    void display(const FrameFcuDisplay &frame);
-    void displayTest();
+    void setFrame(const FrameFcuDisplay &frame);
 
-    bool checkMutation(const FrameFcuDisplay &frame);
+    bool checkMutation() override;
+    void display() override;
+    void displayTestLight() override;
 
 private:
     void printFixedIndicator();
@@ -25,6 +26,8 @@ private:
     bool m_bIsFpa;
     int16_t m_nVerticalSpeed;
     bool m_bIsVerticalSpeedDash;
+
+    bool m_bMutation = true;
 };
 
 #endif

@@ -11,44 +11,35 @@ NavModeDisplayer::NavModeDisplayer(Adafruit_SSD1306 *pScreen, const int8_t &nInd
 
 }
 
-/**
- * @brief Vérification si la frame passée en paramètre contient des valeurs différents de celles déjà affichées sur l'écran
- * 
- * @param frame La frame
- * @return true Des modifications sont présentes, un rafraichissement de l'écran est requis
- * @return false Aucune modification, le rafraichissement de l'écran n'est pas nécéssaire
- */
-bool NavModeDisplayer::checkMutation(const FrameFcuDisplay &frame)
+
+void NavModeDisplayer::setFrame(const FrameFcuDisplay &frame)
 {
-    return 
-        m_bIsTrackMode != frame.isTrack() ||
-        m_bIsFpa != frame.isFpa();
+    if(m_bIsTrackMode != frame.isTrack())
+    {
+        m_bIsTrackMode = frame.isTrack();
+        m_bMutation = true;
+    }
+
+    if(m_bIsTrackMode != frame.isTrack())
+    {
+        m_bIsTrackMode = frame.isTrack();
+        m_bMutation = true;
+    }
 }
 
-void NavModeDisplayer::displayTest()
+bool NavModeDisplayer::checkMutation()
 {
-    selectScreen();
-    m_pScreen->clearDisplay();
-    printTrackIndicator();
-    printHeadingIndicator();
-    printFpaIndicator();
-    printVsIndicator();
-    m_pScreen->display();
+    if(m_bMutation)
+    {
+        m_bMutation = false;
+        return true;
+    }
+
+    return false;
 }
-
-/**
- * @brief Rafraichissement l'écran avec les données de la frame
- * 
- * @param frame La nouvelle frame
- */
-void NavModeDisplayer::display(const FrameFcuDisplay &frame)
-{
-    m_bIsTrackMode = frame.isTrack();
-    m_bIsFpa = frame.isFpa();
-
-    selectScreen(); 
-    m_pScreen->clearDisplay();
     
+void NavModeDisplayer::display()
+{
     if(m_bIsTrackMode)
     {
         printTrackIndicator();
@@ -66,8 +57,14 @@ void NavModeDisplayer::display(const FrameFcuDisplay &frame)
     {
         printVsIndicator();
     }
+}
     
-    m_pScreen->display();    
+void NavModeDisplayer::displayTestLight()
+{
+    printTrackIndicator();
+    printHeadingIndicator();
+    printFpaIndicator();
+    printVsIndicator();
 }
 
 void NavModeDisplayer::printTrackIndicator()

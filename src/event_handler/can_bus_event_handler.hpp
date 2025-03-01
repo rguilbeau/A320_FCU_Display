@@ -35,13 +35,6 @@ private:
     NavModeDisplayer *m_pNavModeDisplayer;
     AltitudeDisplayer *m_pAltitudeDisplayer;
     VerticalDisplayer *m_pVerticalDisplayer;
-
-    bool m_bForceRefreshDisplay;
-
-    void setContrast(const uint8_t &nContrast);
-    void displayNone();
-    void setTestLightIndicators();
-    void display();
 };
 
 #endif

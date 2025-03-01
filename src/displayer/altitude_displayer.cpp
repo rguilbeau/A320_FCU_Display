@@ -11,42 +11,34 @@ AltitudeDisplayer::AltitudeDisplayer(Adafruit_SSD1306 *pScreen, const int8_t &nI
 
 }
 
-/**
- * @brief Vérification si la frame passée en paramètre contient des valeurs différents de celles déjà affichées sur l'écran
- * 
- * @param frame La frame
- * @return true Des modifications sont présentes, un rafraichissement de l'écran est requis
- * @return false Aucune modification, le rafraichissement de l'écran n'est pas nécéssaire
- */
-bool AltitudeDisplayer::checkMutation(const FrameFcuDisplay &frame)
+void AltitudeDisplayer::setFrame(const FrameFcuDisplay &frame)
 {
-    return 
-        m_bIsAltitudeDot != frame.isAltitudeDot() ||
-        m_nAltitude != frame.getAltitude();
+    if(m_bIsAltitudeDot != frame.isAltitudeDot())
+    {
+        m_bIsAltitudeDot = frame.isAltitudeDot();
+        m_bMutation = true;
+    }
+
+    if(m_nAltitude != frame.getAltitude())
+    {
+        m_nAltitude = frame.getAltitude();
+        m_bMutation = true;
+    }
 }
 
-void AltitudeDisplayer::displayTest()
+bool AltitudeDisplayer::checkMutation()
 {
-    selectScreen(); 
-    m_pScreen->clearDisplay();
-    printFixedIndicator();
-    printDigit(F("88888*"));
-    m_pScreen->display();
+    if(m_bMutation)
+    {
+        m_bMutation = false;
+        return true;
+    }
+
+    return false;
 }
 
-/**
- * @brief Rafraichissement l'écran avec les données de la frame
- * 
- * @param frame La nouvelle frame
- */
-void AltitudeDisplayer::display(const FrameFcuDisplay &frame)
+void AltitudeDisplayer::display()
 {
-    m_bIsAltitudeDot = frame.isAltitudeDot();
-    m_nAltitude = frame.getAltitude();
-
-    selectScreen(); 
-    m_pScreen->clearDisplay();
-    
     printFixedIndicator();
 
     String sAltitudeDisplay = leftPad(m_nAltitude, 5);
@@ -57,8 +49,12 @@ void AltitudeDisplayer::display(const FrameFcuDisplay &frame)
     }
 
     printDigit(sAltitudeDisplay);
-        
-    m_pScreen->display();    
+}
+
+void AltitudeDisplayer::displayTestLight()
+{
+    printFixedIndicator();
+    printDigit(F("88888*"));
 }
 
 void AltitudeDisplayer::printFixedIndicator()

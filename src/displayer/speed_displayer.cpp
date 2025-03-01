@@ -11,69 +11,67 @@ SpeedDisplayer::SpeedDisplayer(Adafruit_SSD1306 *pScreen, const int8_t &nIndexDi
     
 }
 
-/**
- * @brief Vérification si la frame passée en paramètre contient des valeurs différents de celles déjà affichées sur l'écran
- * 
- * @param frame La frame
- * @return true Des modifications sont présentes, un rafraichissement de l'écran est requis
- * @return false Aucune modification, le rafraichissement de l'écran n'est pas nécéssaire
- */
-bool SpeedDisplayer::checkMutation(const FrameFcuDisplay &frame) 
-{
-    bool bSameSpeed;
 
+void SpeedDisplayer::setFrame(const FrameFcuDisplay &frame)
+{
     if(frame.isMach())
     {
-        bSameSpeed = m_nSpeed == frame.getMachSpeed();
+        if(m_nSpeed != frame.getMachSpeed())
+        {
+            m_nSpeed = frame.getMachSpeed();
+            m_bMutation = true;
+        }
     }
     else
     {
-        bSameSpeed = m_nSpeed == frame.getKnotSpeed();
+        if(m_nSpeed != frame.getKnotSpeed())
+        {
+            m_nSpeed = frame.getKnotSpeed();
+            m_bMutation = true;
+        }
     }
 
-    return
-        !bSameSpeed || 
-        m_bIsMachSpeed != frame.isMach() ||
-        m_bIsSpeedDash != frame.isSpeedDashed() ||
-        m_bIsSpeedDot != frame.isSpeedDot();
+    if(m_bIsMachSpeed != frame.isMach())
+    {
+        m_bIsMachSpeed = frame.isMach();
+        m_bMutation = true;
+    }
+
+    if(m_bIsSpeedDash != frame.isSpeedDashed())
+    {
+        m_bIsSpeedDash = frame.isSpeedDashed();
+        m_bMutation = true;
+    }
+
+    if(m_bIsSpeedDot != frame.isSpeedDot())
+    {
+        m_bIsSpeedDot = frame.isSpeedDot();
+        m_bMutation = true;
+    }
 }
 
-void SpeedDisplayer::displayTest()
+bool SpeedDisplayer::checkMutation()
 {
-    selectScreen();
-    m_pScreen->clearDisplay();
-    printSpeedIndicator();
-    printMachIndicator();
-    printDigit(F("888*"));
-    m_pScreen->display();
+    if(m_bMutation)
+    {
+        m_bMutation = false;
+        return true;
+    }
+
+    return false;
 }
 
-/**
- * @brief Rafraichissement l'écran avec les données de la frame
- * 
- * @param frame La nouvelle frame
- */
-void SpeedDisplayer::display(const FrameFcuDisplay &frame)
+void SpeedDisplayer::display()
 {
-    m_bIsMachSpeed = frame.isMach();
-    m_bIsSpeedDash = frame.isSpeedDashed();
-    m_bIsSpeedDot = frame.isSpeedDot();
-    
-    selectScreen();
-
-    m_pScreen->clearDisplay();
     String sSpeedDisplay = "";
 
     if(m_bIsMachSpeed) 
     {
-        m_nSpeed = frame.getMachSpeed();
-
         printMachIndicator();
         sSpeedDisplay = String(static_cast<double>(m_nSpeed) / 100);
     } 
     else 
     {
-        m_nSpeed = frame.getKnotSpeed();
         printSpeedIndicator();
         sSpeedDisplay = leftPad(m_nSpeed, 3);
     }
@@ -89,8 +87,14 @@ void SpeedDisplayer::display(const FrameFcuDisplay &frame)
     }
 
     printDigit(sSpeedDisplay);
-    m_pScreen->display();
 }
+    
+void SpeedDisplayer::displayTestLight()
+{
+    printSpeedIndicator();
+    printMachIndicator();
+    printDigit(F("888*"));
+} 
 
 void SpeedDisplayer::printSpeedIndicator()
 {

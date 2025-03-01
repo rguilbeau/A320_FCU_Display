@@ -28,6 +28,9 @@ NavModeDisplayer navModeDisplayer(&display, OLED_NAV_MODE_INDEX);
 AltitudeDisplayer altitudeDisplayer(&display, OLED_ALTITUDE_INDEX);
 VerticalDisplayer verticalDisplayer(&display, OLED_VERTICAL_INDEX);
 
+uint8_t nDisplayerSize = 5;
+Displayer *displayers[] = {&speedDisplayer, &headingDisplayer, &navModeDisplayer, &altitudeDisplayer, &verticalDisplayer};
+
 CanBus canbus(
   PIN_CANBUS_CS_SPI, 
   new CanBusEventHandler(
@@ -50,6 +53,8 @@ void setup()
   SERIAL_PRINTLN(F("Starting..."));
 
   Wire.begin();
+  Wire.setClock(400000); // I2C fast mode
+
   speedDisplayer.begin(SCREEN_ADDRESS);
   headingDisplayer.begin(SCREEN_ADDRESS);
   navModeDisplayer.begin(SCREEN_ADDRESS);
@@ -62,13 +67,15 @@ void setup()
   SERIAL_PRINTLN(F("Started !"));
 }
 
-unsigned long lastTime = millis();
-
 /**
  * @brief Attente et traitement des messages du CAN Bus
  * 
  */
 void loop() 
 {
-  canbus.loop();
+  for(uint8_t nIndexDisplayer = 0; nIndexDisplayer < nDisplayerSize; nIndexDisplayer++)
+  {
+    canbus.loop(); // call can loop between each display update, can avoid lost messages
+    displayers[nIndexDisplayer]->loop();
+  }
 }

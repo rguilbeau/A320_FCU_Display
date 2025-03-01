@@ -11,10 +11,11 @@ public:
     explicit NavModeDisplayer(Adafruit_SSD1306 *pScreen, const int8_t &nIndexDisplay);
     virtual ~NavModeDisplayer() = default;
 
-    void display(const FrameFcuDisplay &frame);
-    void displayTest();
+    void setFrame(const FrameFcuDisplay &frame);
 
-    bool checkMutation(const FrameFcuDisplay &frame);
+    bool checkMutation() override;
+    void display() override;
+    void displayTestLight() override;
 
 private:
     void printTrackIndicator();
@@ -24,6 +25,8 @@ private:
 
     bool m_bIsTrackMode;
     bool m_bIsFpa;
+
+    bool m_bMutation = true;
 };
 
 #endif

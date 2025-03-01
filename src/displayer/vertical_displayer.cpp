@@ -11,58 +11,53 @@ VerticalDisplayer::VerticalDisplayer(Adafruit_SSD1306 *pScreen, const int8_t &nI
 
 }
 
-/**
- * @brief Vérification si la frame passée en paramètre contient des valeurs différents de celles déjà affichées sur l'écran
- * 
- * @param frame La frame
- * @return true Des modifications sont présentes, un rafraichissement de l'écran est requis
- * @return false Aucune modification, le rafraichissement de l'écran n'est pas nécéssaire
- */
-bool VerticalDisplayer::checkMutation(const FrameFcuDisplay &frame)
+
+void VerticalDisplayer::setFrame(const FrameFcuDisplay &frame)
 {
-    bool bSameVerticalSpeed;
 
     if(frame.isFpa())
     {
-        bSameVerticalSpeed = m_nVerticalSpeed != frame.getFpa();
+        if(m_nVerticalSpeed != frame.getFpa())
+        {
+            m_nVerticalSpeed = frame.getFpa();
+            m_bMutation = true;
+        }
     }
     else
     {
-        bSameVerticalSpeed = m_nVerticalSpeed != frame.getVerticalSpeed();
+        if(m_nVerticalSpeed != frame.getVerticalSpeed())
+        {
+            m_nVerticalSpeed = frame.getVerticalSpeed();
+            m_bMutation = true;
+        }
     }
 
-    return
-        !bSameVerticalSpeed ||
-        m_bIsFpa != frame.isFpa() ||
-        m_bIsVerticalSpeedDash != frame.isVerticalSpeedDashed();
+    if(m_bIsFpa != frame.isFpa())
+    {
+        m_bIsFpa = frame.isFpa();
+        m_bMutation = true;
+    }
+
+    if(m_bIsVerticalSpeedDash != frame.isVerticalSpeedDashed())
+    {
+        m_bIsVerticalSpeedDash = frame.isVerticalSpeedDashed();
+        m_bMutation = true;
+    }
 }
 
-void VerticalDisplayer::displayTest()
+bool VerticalDisplayer::checkMutation()
 {
-    selectScreen(); 
-    m_pScreen->clearDisplay();
-    
-    printFixedIndicator();
-    printVsSpeedIndicator();
-    printFpaIndicator();
-    printDigit(F("+8888"));
-    
-    m_pScreen->display(); 
+    if(m_bMutation)
+    {
+        m_bMutation = false;
+        return true;
+    }
+
+    return false;
 }
 
-/**
- * @brief Rafraichissement l'écran avec les données de la frame
- * 
- * @param frame La nouvelle frame
- */
-void VerticalDisplayer::display(const FrameFcuDisplay &frame)
+void VerticalDisplayer::display()
 {
-    m_bIsFpa = frame.isFpa();
-    m_bIsVerticalSpeedDash = frame.isVerticalSpeedDashed(),
-
-    selectScreen(); 
-    m_pScreen->clearDisplay();
-    
     printFixedIndicator();
 
     if(m_bIsFpa) 
@@ -83,13 +78,11 @@ void VerticalDisplayer::display(const FrameFcuDisplay &frame)
     {
         if(m_bIsFpa) 
         {   
-            m_nVerticalSpeed = frame.getFpa();
-
             verticalSpeedDisplay = String(static_cast<double>(abs(m_nVerticalSpeed)) / 10);
             verticalSpeedDisplay = verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 1) + " ";
-        } else {
-            m_nVerticalSpeed = frame.getVerticalSpeed();
-
+        } 
+        else 
+        {
             // -5 parce que float 1600.00
             verticalSpeedDisplay = leftPad(abs(m_nVerticalSpeed), 4);
             verticalSpeedDisplay = verticalSpeedDisplay.substring(0, verticalSpeedDisplay.length() - 2) + "oo";
@@ -106,8 +99,14 @@ void VerticalDisplayer::display(const FrameFcuDisplay &frame)
     }
 
     printDigit(verticalSpeedDisplay);
-        
-    m_pScreen->display();    
+}
+
+void VerticalDisplayer::displayTestLight()
+{
+    printFixedIndicator();
+    printVsSpeedIndicator();
+    printFpaIndicator();
+    printDigit(F("+8888"));
 }
 
 void VerticalDisplayer::printFixedIndicator()
