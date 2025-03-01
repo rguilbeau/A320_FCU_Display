@@ -12,12 +12,6 @@ CanBusEventHandler::CanBusEventHandler(
     m_pNavModeDisplayer = pNavModeDisplayer; 
     m_pAltitudeDisplayer = pAltitudeDisplayer; 
     m_pVerticalDisplayer = pVerticalDisplayer;
-
-    m_pSpeedDisplayer->setContrast(255);
-    m_pHeadingDisplayer->setContrast(255);
-    m_pNavModeDisplayer->setContrast(255);
-    m_pAltitudeDisplayer->setContrast(255);
-    m_pVerticalDisplayer->setContrast(255);
 }
 
 void CanBusEventHandler::frameReceived(const Frame &frame)
@@ -39,19 +33,30 @@ void CanBusEventHandler::frameReceived(const Frame &frame)
     {
         FrameBrightnessPanel brightnessPanelFrame(frame);
 
-        m_pSpeedDisplayer->setContrast(brightnessPanelFrame.getDisplayGlareshield());
-        m_pSpeedDisplayer->setTestLight(brightnessPanelFrame.isTestLight());
+        uint8_t nContrast = brightnessPanelFrame.getDisplayGlareshield();
+        m_pSpeedDisplayer->setContrast(nContrast);
+        m_pHeadingDisplayer->setContrast(nContrast);
+        m_pNavModeDisplayer->setContrast(nContrast);
+        m_pAltitudeDisplayer->setContrast(nContrast);
+        m_pVerticalDisplayer->setContrast(nContrast);
+        
+        bool bIsTestLight = brightnessPanelFrame.isTestLight();
+        m_pSpeedDisplayer->setTestLight(bIsTestLight);
+        m_pHeadingDisplayer->setTestLight(bIsTestLight);
+        m_pNavModeDisplayer->setTestLight(bIsTestLight);
+        m_pAltitudeDisplayer->setTestLight(bIsTestLight);
+        m_pVerticalDisplayer->setTestLight(bIsTestLight);
+    }
 
-        m_pHeadingDisplayer->setContrast(brightnessPanelFrame.getDisplayGlareshield());
-        m_pHeadingDisplayer->setTestLight(brightnessPanelFrame.isTestLight());
+    else if(frame.getId() == e_frameId::POWER)
+    {
+        FramePower powerFrame(frame);
 
-        m_pNavModeDisplayer->setContrast(brightnessPanelFrame.getDisplayGlareshield());
-        m_pNavModeDisplayer->setTestLight(brightnessPanelFrame.isTestLight());
-
-        m_pAltitudeDisplayer->setContrast(brightnessPanelFrame.getDisplayGlareshield());
-        m_pAltitudeDisplayer->setTestLight(brightnessPanelFrame.isTestLight());
-
-        m_pVerticalDisplayer->setContrast(brightnessPanelFrame.getDisplayGlareshield());
-        m_pVerticalDisplayer->setTestLight(brightnessPanelFrame.isTestLight());
+        bool bIsPowered = powerFrame.isFcuDisplayPowered();
+        m_pSpeedDisplayer->setPowerOn(bIsPowered);
+        m_pHeadingDisplayer->setPowerOn(bIsPowered); 
+        m_pNavModeDisplayer->setPowerOn(bIsPowered); 
+        m_pAltitudeDisplayer->setPowerOn(bIsPowered); 
+        m_pVerticalDisplayer->setPowerOn(bIsPowered);
     }
 }

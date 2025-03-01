@@ -13,11 +13,12 @@
 #include "displayer/altitude_displayer.hpp"
 #include "displayer/vertical_displayer.hpp"
 
-const uint16_t numberFilters = 2;
+const uint16_t numberFilters = 3;
 const uint32_t filters[numberFilters] = 
 {
   e_frameId::FCU_DISPLAY,
-  e_frameId::BRIGTNESS_PANEL
+  e_frameId::BRIGTNESS_PANEL,
+  e_frameId::POWER
 };
 
 // Initialisation des objets des afficheurs

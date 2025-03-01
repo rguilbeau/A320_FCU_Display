@@ -12,6 +12,7 @@
 
 #include "frames/frame_fcu_display.hpp"
 #include "frames/frame_brightness_panel.hpp"
+#include "frames/frame_power.hpp"
 
 class CanBusEventHandler: public CanBusFrameEvent {
 
@@ -27,9 +28,6 @@ public:
     void frameReceived(const Frame &frame) override;
 
 private:
-    FrameBrightnessPanel m_brightnessPanelFrame;
-    FrameFcuDisplay m_fcuDisplayFrame;
-
     SpeedDisplayer *m_pSpeedDisplayer;
     HeadingDisplayer *m_pHeadingDisplayer; 
     NavModeDisplayer *m_pNavModeDisplayer;
